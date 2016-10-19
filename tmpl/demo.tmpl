@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -x
+
+if [ ! -d "{{.WebRoot}}/{{.Git.Repository.Name}}"  ]; then
+    mkdir -p {{.WebRoot}}
+    cd {{.WebRoot}}
+    git clone -b master {{.Git.Repository.GitSSHUrl}} --quiet
+    cd {{.WebRoot}}/{{.Git.Repository.Name}}
+
+    git checkout {{.Branch}} --quiet
+    git submodule update --init --recursive --quiet
+    
+    if [ -f "composer.json" ]; then
+        /usr/local/php/bin/php /usr/local/bin/composer install --prefer-dist --quiet
+        /usr/local/php/bin/php /usr/local/bin/composer dump-autoload --optimize --quiet
+    fi
+fi
+
+cd {{.WebRoot}}/{{.Git.Repository.Name}}
+git checkout {{.Branch}} --quiet
+git fetch -p --all --quiet
+git reset --hard origin/{{.Branch}} --quiet
+
+git submodule update --remote --quiet
+/usr/local/php/bin/php /usr/local/bin/composer install --prefer-dist --quiet
+/usr/local/php/bin/php /usr/local/bin/composer dump-autoload --optimize --quiet
+
+if [ -f ".env.dev" ]; then
+    cp .env.dev .env
+fi
