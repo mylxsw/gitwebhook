@@ -29,4 +29,4 @@ git fetch -p --all --quiet
 git reset --hard origin/{{.Branch}} --quiet
 
 # 修改项目目录权限
-chown -R www:www {{.WebRoot}}/{{.Git.Repository.Name}}
+chown -R nginx:nginx {{.WebRoot}}/{{.Git.Repository.Name}}
