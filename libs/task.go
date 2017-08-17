@@ -10,6 +10,7 @@ import (
 // 部署任务参数
 type TaskParam struct {
 	Git          gitlab.GitLabObj
+	Actions      []string
 	TmplFilename string
 	WebRoot      string
 	Branch       string

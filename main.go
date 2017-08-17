@@ -70,8 +70,22 @@ func webHookHandler(resp http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	// 支持在commit message中使用 @@ 形式的命令
+	actions := []string{}
+	for _, commit := range params.Commits {
+		for _, line := range strings.Split(commit.Message, "\n") {
+			if strings.HasPrefix(line, "@@") {
+				action := line[2:]
+				if action != "" {
+					actions = append(actions, action)
+				}
+			}
+		}
+	}
+
 	taskParamChan <- libs.TaskParam{
 		Git:          params,
+		Actions:      actions,
 		TmplFilename: tmplFilename,
 		WebRoot:      webroot,
 		Branch:       branch,

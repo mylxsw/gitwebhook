@@ -11,8 +11,8 @@ build-linux:
 deploy: build-linux deploy-linux clean-linux
 
 deploy-linux:build-linux
-	scp ./gitwebhook-linux root@192.168.1.100:/usr/bin/gitwebhook
-	scp -r ./tmpl/*.tmpl root@192.168.1.100:/data/deployment/githook-tmpl/
+	scp ./gitwebhook-linux root@192.168.1.223:/usr/bin/gitwebhook
+	scp -r ./tmpl/*.tmpl root@192.168.1.223:/data/deployment/githook-tmpl/
 
 deploy-mac:build-mac
 	cp ./gitwebhook /usr/local/bin/gitwebhook
